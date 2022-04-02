@@ -1,6 +1,10 @@
 import React from "react";
 import {firebase, auth} from "../service/firebase";
 import { useNavigate, Link } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+
+
+
 
 class firebaseService {
 
@@ -33,7 +37,14 @@ class firebaseService {
     return this.unsubcribe
     })
 
-    
+/*Função deslogar usuario */
+        singOut = () => {
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            const navigation = useNavigate()
+            navigation('/')
+        }).catch(error => alert(error.message));
+    }
 
 
 

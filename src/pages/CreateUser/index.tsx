@@ -5,8 +5,6 @@ import styles from "./styles.module.scss";
 import { firebaseService } from "../../service/service";
 
 
-
-
 export function CreateUser() {
 
     const [email, setEmail] = useState('')
