@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../service/firebase";
 
 import styles from "./styles.module.scss";
+import { PokeCard } from "../../component/PokeCard";
 
 import logo from "../../assets/icones/pokedex.png";
 import pokemonPhoto from "../../assets/charizard.png";
@@ -23,7 +24,6 @@ type pokeCard = {
     experience: number
     height: number
 }
-
 
 
 export function Home() {
@@ -77,37 +77,37 @@ export function Home() {
 
     return(
         <div className={styles.container}>
-            <div className={styles.header}>
-                <h1>Olá, {auth.currentUser?.email}</h1>
-                <img src={pokemonLogo} alt="" />
-                <button onClick={singOut}> SAIR </button>
+            
+            <div className={styles.header}> 
+                <div className={styles.logoHeader}>
+                    <img src={pokemonLogo} alt="" />
+                </div>
+                <div className={styles.buttonHeader}>
+                    <h1>Olá, {auth.currentUser?.email}</h1>
+                    <button onClick={singOut}> SAIR </button>
+                </div>
             </div>
-
+            
             <div className={styles.bodyPokedex}>
+
                 <div className={styles.perfilPokemon}>
-                    <div className={styles.cardPoke}>
-                        <div className={styles.image}>
-                            <img src={Meupokemon?.img} alt="" />
-                        </div>
-                        <div className={styles.tittleCard}>
-                            <h1>{Meupokemon?.name}</h1>
-                        </div>
-                        <div className={styles.description}>
-                            <p>Peso: {Meupokemon?.weight}</p>
-                            <p>Altura: {Meupokemon?.height}</p>
-                            <p>Experiência: {Meupokemon?.experience}</p>
-                        </div>
-                    </div>
+                    {Meupokemon != null && (
+                    <PokeCard 
+                    photo = {Meupokemon?.img} 
+                    name = {Meupokemon?.name}
+                    weight = {Meupokemon?.weight}
+                    height = {Meupokemon?.height}
+                    experience = {Meupokemon?.experience}
+                    />
+                    )}
                 </div>
 
                 <div className={styles.listPokemon}>
+
                     <div className={styles.imageLogo}>
-                        <img src={logo} alt="" />
-                        <h1>POKEDEX</h1>
+                        <h1>MEUS POKEMONS</h1>
                     </div>
-                    <div className={styles.tittle}>
-                        <p>Meus Pokemons</p>
-                    </div>
+
                     <ul className={styles.list}>
                         {pokemonIniciais.map( pokemon => (
                         <li 
@@ -120,20 +120,20 @@ export function Home() {
                                 </div>
                                 <div className={styles.infoPoke}>
                                     <h1>{pokemon.nome}</h1>
-                                    <p>{pokemon.peso}</p>
                                 </div>
                             </div>
                         </li>
                         ))}
                     </ul>
+
                     <Link 
                     className={styles.hunt}
-                    to={''}
-                    
+                    to={'/hunt'}
                     >
+                        <h1>ENCONTRAR NOVOS POKEMONS!</h1> 
                         <img src={Map} alt="" />
-                        <h1>Caçar Pokemons!</h1> 
                     </Link>
+
                 </div>
 
             </div>

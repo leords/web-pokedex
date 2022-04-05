@@ -3,8 +3,7 @@ import { AuthLogin } from "../AuthLogin";
 
 import styles from "./styles.module.scss";
 
-import logo from "../../assets/icones/logo.png";
-import background from "../../assets/background.png";
+import pokemonLogo from "../../assets/pokemon-logo.png"
 import { Link } from "react-router-dom";
 import { CreateUser } from "../CreateUser";
 
@@ -12,12 +11,12 @@ export function Login() {
 
     const [condition, setCondition] = useState(true)
 
-
     return(
         <div className={styles.container}>
             <div className={styles.login}>
-                <div>
-                    <img src={logo} alt="" />
+
+                <div className={styles.logo}>
+                    <img src={pokemonLogo} alt="" />
                 </div>
 
                 {condition == true && (
@@ -47,9 +46,6 @@ export function Login() {
                     </div>
                 )}
            
-            </div>
-            <div className={styles.image}>
-                <img src={background} alt="" />
             </div>
         </div>
     )
