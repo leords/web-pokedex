@@ -31,23 +31,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-bottom: 200px;
+
 }
 
-.containerCorousel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-    height: 100%;
-}
-
-.carousel {
-    width: 80%;
+.containerList {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin-top: -100px;
+    justify-content: center;
+
 }
 
 .listCard {
@@ -55,4 +48,45 @@
     justify-content: center;
     align-items: center;
     width: 100%
+}
+
+.containerButtonPlus {
+    position: absolute; //sempre posiciona no centro da div???
+    margin-left: 600px;
+
+    button {
+        color: rgb(0, 119, 255);
+        width: 70px;
+        height: 70px;
+        border-radius: 50px;
+        border-style: none;
+
+        -webkit-box-shadow:0px 0px 4px 1px rgba(15,14,14,0.18);
+        -moz-box-shadow: 0px 0px 4px 1px rgba(15,14,14,0.18);
+        box-shadow: 0px 0px 4px 1px rgba(15,14,14,0.18);
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+        }
+    }
+}
+
+.containerButtonGet {
+    position: absolute;
+    margin-top: 700px;
+
+    img {
+        width: 70px;
+    }
+}
+
+.containerDescription {
+    position: absolute;
+    margin-top: 800px;
+
+    h1 {
+        color: white;
+        font-size: 12px;
+    }
 }
