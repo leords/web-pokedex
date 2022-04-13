@@ -12,13 +12,8 @@ import pokemonLogo from "../../assets/pokemon-logo.png";
 import Map from "../../assets/icones/mapa.png";
 import Logo from "../../assets/icones/logo.png";
 
-const pokemonInicial =  [
-    { id: 12, nome: 'bombassauro', img: 'ahduajmaidhda', },
-    { id: 14, nome: 'bombassauro', img: 'ahduajmaidhda', }
-]
-
-
 interface pokeCard {
+    id: number,
     name: string
     img: URL
     weight: number
@@ -36,87 +31,57 @@ interface pokeList {
     height: number
 } 
 
-interface List {
-    pokemon: number
-}
-
  
 export function Home() {
  
     const navigation = useNavigate()
-    const [listId, setListId] = useState<[List]>()
-    const listPokemon: 
-        string | {
-        id: number; 
-        name: string; 
-        img: URL; 
-        weight: number; 
-        experience: number; 
-        height: number; }[] = []
+
+    var listIdFromFireBase: { 
+        id:number,
+        name: string
+        img: URL
+        weight: number
+        experience: number
+        height: number 
+    }[] = [];
+
     const [ Meupokemon, setMeuPokemon ] = React.useState<pokeCard>();
     const [ PokemonList, setPokemonList ] = React.useState<pokeList>();
 
-    /*  Busca e retorna a lista de pokemons salvo no firebase referente ao usuário logado.
-     *  Busca os pokemons referente a lista para setar no componente LIST.     */
+    /*  Busca e retorna a lista de pokemons salvo no firebase referente ao usuário logado. */
 
     useEffect (() => {
-        const myId: string | number = auth.currentUser?.uid;
-
-        var listCountPoke = firebase.database().ref('pokedex/').orderByChild('idUser').equalTo(myId)
-        try {
+        async function getListIdPokemon() {
+            try {
+                const myId: string | number = auth.currentUser?.uid;
+    
+                var listCountPoke = await firebase.database().ref('pokedex/').orderByChild('idUser').equalTo(myId)
+                
                 listCountPoke.on('value', (snapshot) => {
- 
-                const list: {
-                    pokemon: object
-                }[] = [] 
     
-                snapshot.forEach(childItem => { 
-                    list.push ({
-                        pokemon: childItem.val().pokemon  
-                    })                  
+                if (snapshot == null) {
+                    alert('Você está com a pokedex vázia.')
+                } else {
+                    snapshot.forEach(childItem => { 
+                        listIdFromFireBase.push ({ 
+                            id: childItem.val().id,
+                            name: childItem.val().name,
+                            img: childItem.val().img,
+                            weight: childItem.val().weight,
+                            experience: childItem.val().experience,
+                            height: childItem.val().height
+                        })                  
+                    }); 
+                }        
+                setPokemonList(listIdFromFireBase)
                 });
-                setListId(list)  
-            });
-        } catch (error) {
-            alert('404!')
-        }
-
-        let i = 0
-
-        if (listId != null) {
-            const xLength:number = listId.length
-
-            while (i < xLength) { 
-                const endpoint = `https://pokeapi.co/api/v2/pokemon/${listId[i].pokemon}/`;
-                const idPokemon = listId[i].pokemon
-    
-                fetch(endpoint)
-                   .then(resposta => resposta.json())
-                       .then ( json => {
-                           const pokemonSearch = {
-                               id: idPokemon,
-                               name: json.name,
-                               img: json.sprites.other["official-artwork"].front_default,
-                               weight: json.weight,
-                               experience: json.base_experience,
-                               height: json.height
-                           };   
-                           
-                           listPokemon.push(pokemonSearch)           
-                       })
-                       .catch( () => {
-                           alert('Não foi carregar o poke!');
-                   });
-                i = i + 1;
+            } catch (error) {   
             }
-        } else { 
-            alert('você ainda não tem nenhum pokemon!')
         }
-        setPokemonList(listPokemon)
-        console.log('listpokemon' , listPokemon)
-        console.log('deu certo? ', PokemonList)
+
+        getListIdPokemon()
+
     }, [])
- 
 
     // Faz o Logout do usuário.
     const singOut = () => {
@@ -152,7 +117,6 @@ export function Home() {
             });
     } 
 
-
     return(
         <div className={styles.container}>
             <div className={styles.header}> 
@@ -167,6 +131,7 @@ export function Home() {
             
             <div className={styles.bodyPokedex}>
                 <div className={styles.perfilPokemon}>
+
                     {Meupokemon != null && (
                         <PokeCard 
                         photo = {Meupokemon?.img} 
@@ -176,20 +141,24 @@ export function Home() {
                         experience = {Meupokemon?.experience}
                         />
                     )}
+
                     {Meupokemon == null && (
                         <div className={styles.containerNull}>
                             <img src={Logo} alt="" />
                         </div>
                     )}
+
                 </div>
 
                 <div className={styles.listPokemon}>
                     <div className={styles.imageLogo}> 
                         <h1>MEUS POKEMONS</h1> 
                     </div> 
+
                     {PokemonList != null && (
                         <ul className={styles.list}>
-                            {PokemonList.map((pokemon: { id: number; img: URL; name: string; weight: number; experience: number; height: number; }) => (
+
+                            {PokemonList.map((pokemon: {id:number, img: URL, name: string})=> (
                                 <li 
                                 key={pokemon.id}
                                 className={styles.listPoke}
@@ -200,19 +169,21 @@ export function Home() {
                                             <img src={pokemon.img}  alt="" />
                                         </div>
                                         <div className={styles.infoPoke}> 
-                                                <h1>Leo</h1>
                                             <h1>{pokemon.name}</h1> 
                                         </div>
                                     </div>
                                 </li>
                             ))}
+
                         </ul> 
                     )}  
+
                     {PokemonList == null && (
                         <h1>Pokedex Vázia</h1>
-                    )}                       
+                    )}
+
                     <Link 
-                    className={styles.hunt}
+                    className={styles.hunt} 
                     to={'/hunt'}
                     >
                         <h1>ENCONTRAR NOVOS POKEMONS!</h1> 
@@ -220,7 +191,6 @@ export function Home() {
                     </Link>
 
                 </div>
-
             </div>
         </div>
     )

@@ -62,7 +62,12 @@ export function PokeHunt() {
         var newPostRef = postListRef.push();
         newPostRef.set({ 
             idUser: auth.currentUser?.uid,
-            pokemon: idPoke
+            id: idPoke,
+            name: huntPokemon?.name,
+            img: huntPokemon?.img,
+            weight: huntPokemon?.weight,
+            experience: huntPokemon?.experience,
+            height: huntPokemon?.height
         });
         
         getPokemonData
