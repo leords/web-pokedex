@@ -9,12 +9,12 @@ import { PokeCard } from "../../component/PokeCard";
 
 import styles from './styles.module.scss';
 
-
+//Lista de pokemon salvo para evitar a repetição do mesmo pokemon no momento de encontrar novos poke;
 const listHunt: number[] = [];
 
+// tipagem para Pokecard!
 type pokeCard = {
-    id: number
-    name: String
+    name: string
     img: URL
     weight: number
     experience: number
@@ -26,7 +26,7 @@ export function PokeHunt() {
     const [huntPokemon, setHuntPokemon] = React.useState<pokeCard>();
 
 
-// Função buscando pokemon com numeros aleatórios
+    // Função que retorna a busca de pokemon dentro da PokeApi por ID gerado aleatóriamente por um random.
     const getPokemonData = () => {
 
         const random = Math.floor(Math.random() * 100) + 1;
@@ -40,7 +40,6 @@ export function PokeHunt() {
             .then(resposta => resposta.json())
                 .then ( json => {
                     const pokemonSearch = {
-                        id: random,
                         name: json.name,
                         img: json.sprites.other["official-artwork"].front_default,
                         weight: json.weight,
@@ -53,19 +52,21 @@ export function PokeHunt() {
                     alert('Não foi carregar o poke!');
                 });
         }
-        } 
-    
+    } 
+
+// função que salva o pokemon escolhido na base de dados firebase.   
     const writeUserData = () => {
         const idPoke = listHunt[listHunt.length-1]
 
-        var postListRef = firebase.database().ref('user/' + auth.currentUser?.uid + '/pokedex');
+        var postListRef = firebase.database().ref('pokedex/');
         var newPostRef = postListRef.push();
-        newPostRef.set({
+        newPostRef.set({ 
+            idUser: auth.currentUser?.uid,
             pokemon: idPoke
         });
         
         getPokemonData
-        alert('Passoou')
+        alert('Você capturou o pokemon: ' + huntPokemon?.name)
     }
 
 
@@ -77,13 +78,15 @@ export function PokeHunt() {
             <div className={styles.camp}>
                 <div className={styles.containerList}>
                     <div className={styles.listCard}>
-                        <PokeCard 
-                            photo={huntPokemon?.img}
-                            name={huntPokemon?.name}
-                            height= {huntPokemon?.height}
-                            weight={huntPokemon?.weight}
-                            experience={huntPokemon?.experience}
-                        />
+                        {huntPokemon != null && (
+                            <PokeCard 
+                            photo = {huntPokemon?.img}
+                            name = {huntPokemon?.name}
+                            height = {huntPokemon?.height}
+                            weight = {huntPokemon?.weight}
+                            experience = {huntPokemon?.experience}
+                            />
+                        )}
                     </div>
                     <div className={styles.containerButtonPlus}>
                         <button onClick={getPokemonData} > 

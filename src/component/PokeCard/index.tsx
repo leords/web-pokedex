@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 
 
 
-export function PokeCard(props: { photo: string; name: string; weight: number, height: number, experience: number}) {
+export function PokeCard(props: { photo: URL; name: string; weight: number, height: number, experience: number}) {
     return(
         <div className={styles.perfilPokemon}>
             <div className={styles.cardPoke}>
