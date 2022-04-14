@@ -94,7 +94,7 @@ export function Home() {
         });
     }
 
-    // Busca o pokemon para setar no componente CARD.
+    // Busca o pokemon para setar no componente CARD. 
     const getPokemonData = (idPokemon: number) => {
         const endpoint = `https://pokeapi.co/api/v2/pokemon/${idPokemon}/`;
 
