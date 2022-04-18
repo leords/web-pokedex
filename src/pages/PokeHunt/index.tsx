@@ -21,10 +21,55 @@ type pokeCard = {
     height: number
 }
 
+
 export function PokeHunt() {
 
     const [huntPokemon, setHuntPokemon] = React.useState<pokeCard>();
+    const [lenghtListPoke, setLenghtListPoke] = useState(0)
 
+    useEffect (() => {
+        async function getListIdPokemon() {
+
+            try {
+                const myId: string | number = auth.currentUser?.uid;
+    
+                var listCountPoke = await firebase.database().ref('usuario/' + 'pokemon/').orderByChild('idUser').equalTo(myId)
+                
+                listCountPoke.on('value', (snapshot) => {
+    
+                if (snapshot == null) {
+                    alert('Você está com a pokedex vázia.')
+                } else {
+                    var listIdFromFireBase: { 
+                        id:number,
+                        name: string
+                        img: URL
+                        weight: number
+                        experience: number
+                        height: number 
+                    }[] = [];
+
+                    snapshot.forEach(childItem => { 
+                        listIdFromFireBase.push ({
+                            id: childItem.val().id,
+                            name: childItem.val().name,
+                            img: childItem.val().img,
+                            weight: childItem.val().weight,
+                            experience: childItem.val().experience,
+                            height: childItem.val().height
+                        })                 
+                    }); 
+                    const length = listIdFromFireBase.length
+                    setLenghtListPoke(length)
+                }        
+                });
+            } catch (error) {   
+            }
+        }
+
+        getListIdPokemon()
+
+    }, [])
 
     // Função que retorna a busca de pokemon dentro da PokeApi por ID gerado aleatóriamente por um random.
     const getPokemonData = () => {
@@ -56,11 +101,16 @@ export function PokeHunt() {
 
 // função que salva o pokemon escolhido na base de dados firebase.   
     const writeUserData = () => {
+
+        if (lenghtListPoke >= 4) {
+            alert('Limite excedido! já tem 4 pokemons! retorne na pokedex e verifique. ')
+        } else {
         const idPoke = listHunt[listHunt.length-1]
 
-        var postListRef = firebase.database().ref('pokedex/');
+        var postListRef = firebase.database().ref('usuario/' + 'pokemon/');
         var newPostRef = postListRef.push();
         newPostRef.set({ 
+            key: newPostRef.key,
             idUser: auth.currentUser?.uid,
             id: idPoke,
             name: huntPokemon?.name,
@@ -72,6 +122,7 @@ export function PokeHunt() {
         
         getPokemonData
         alert('Você capturou o pokemon: ' + huntPokemon?.name)
+        }
     }
 
 
