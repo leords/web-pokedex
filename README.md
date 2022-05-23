@@ -4,7 +4,11 @@
 <br>
 
 <p align="center">
-  IMG
+  <img alt="Pokedex Pokemon Login" src="pokedex login.png" width="100%">
+</p>
+
+<p align="center">
+  <img alt="Pokedex Pokemon Home" src="pokedex home.png" width="100%">
 </p>
 
 ## 🚀 Tecnologias
@@ -18,12 +22,10 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - Firebase
 
 Bibliotecas
+- react-confirm-alert
+- react-router-dom
+- react-responsive-carousel
 
-- 
-
-Utilitários
-
-- 
 
 ## 💻 Projeto
 
