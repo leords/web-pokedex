@@ -33,7 +33,7 @@ Pokedex é um projeto de estudos, a idéia consiste em uma pokedex utilizando fe
 
 Segue algumas funções existentes neste projeto:
 
-- Autenticação com Firebase do usúario
+- Autenticação com Firebase do usuário
 - CRUD dos personagens 
 - Consumo da PokéAPI - [Link](https://pokeapi.co/)
 
